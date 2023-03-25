@@ -16,18 +16,18 @@ from networks import *
 from time import time
 
 
-parser = argparse.ArgumentParser(description="PReNet_2_train")
+parser = argparse.ArgumentParser(description="PReNet_UNet_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
-parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
-parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
+parser.add_argument("--batch_size", type=int, default=3, help="Training batch size")
+parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
-parser.add_argument("--save_path", type=str, default="logs/PReNet_2_test", help='path to save models and log files')
+parser.add_argument("--save_path", type=str, default="logs/PReNet_UNet_test", help='path to save models and log files')
 parser.add_argument("--save_freq",type=int,default=1,help='save intermediate model')
 parser.add_argument("--data_path",type=str, default="datasets/train/Rain12600",help='path to training data')
 parser.add_argument("--use_gpu", type=bool, default=True, help='use GPU or not')
 parser.add_argument("--gpu_id", type=str, default="0", help='GPU id')
-parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
+# parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
 opt = parser.parse_args()
 
 if opt.use_gpu:
@@ -41,7 +41,7 @@ def main():
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
-    model = PReNet_2(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+    model = PReNet_UNet(use_GPU=opt.use_gpu)
     print_network(model)
 
     # loss function

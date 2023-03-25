@@ -11,3 +11,5 @@ python test_PRN.py --logdir logs/Rain100L/PRN6 --save_path results/Rain100L/PRN6
 
 # PRN_r
 python test_PRN_r.py --logdir logs/Rain100L/PRN6_r --save_path results/Rain100L/PRN_r --data_path datasets/test/Rain100L/rainy
+
+python test_PRN_dense.py --logdir logs/Rain100L/PRN_dense --save_path results/Rain100L/PRN_dense --data_path datasets/test/Rain100L/rainy

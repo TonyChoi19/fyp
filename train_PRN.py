@@ -13,20 +13,22 @@ from utils import *
 from torch.optim.lr_scheduler import MultiStepLR
 from SSIM import SSIM
 from networks import *
-from time import time
 
 
+<<<<<<< HEAD:train_PRN.py
 parser = argparse.ArgumentParser(description="PReNet_train")
+parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
+=======
+parser = argparse.ArgumentParser(description="PReNet_2_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
+>>>>>>> ee58d4620cbaf4749cf1f711250921477a76d5e6:train_PReNet_2.py
 parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
-parser.add_argument("--batch_size", type=int, default=3, help="Training batch size")
-parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')
 parser.add_argument("--save_freq",type=int,default=1,help='save intermediate model')
-parser.add_argument("--data_path",type=str, default="datasets/train/Rain12600",help='path to training data')
+parser.add_argument("--data_path",type=str, default="datasets/train/RainTrainL",help='path to training data')
 parser.add_argument("--use_gpu", type=bool, default=True, help='use GPU or not')
 parser.add_argument("--gpu_id", type=str, default="0", help='GPU id')
 parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
@@ -44,7 +46,7 @@ def main():
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
-    model = PReNet(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+    model = PRN(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
     print_network(model)
 
     # loss function
@@ -107,8 +109,6 @@ def main():
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
-
-        scheduler.step(epoch)
         ## epoch training end
 
         # log the images
@@ -129,10 +129,8 @@ def main():
 
 
 if __name__ == "__main__":
-    start_time = time()
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
-            print(opt.data_path.find('RainTrainH'))
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
         elif opt.data_path.find('RainTrainL') != -1:
             prepare_data_RainTrainL(data_path=opt.data_path, patch_size=100, stride=80)
@@ -141,11 +139,4 @@ if __name__ == "__main__":
         else:
             print('unkown datasets: please define prepare data function in DerainDataset.py')
 
-
     main()
-    finish_time = time()-start_time
-    hour = math.floor(finish_time / 3600) 
-    minute = math.floor((finish_time - (finish_time/3600)) / 60) 
-    second = math.floor((finish_time - (finish_time/3600)) % 60) 
-    print("--- %s hrs, %s minute, %s seconds" %(hour, minute, second))
-
