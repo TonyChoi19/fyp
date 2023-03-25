@@ -15,11 +15,28 @@ from SSIM import SSIM
 from networks import *
 
 
+<<<<<<< HEAD
+<<<<<<<< HEAD:train_PReNet_r.py
 <<<<<<< HEAD:train_PReNet_r.py
+========
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN.py
+=======
+<<<<<<<< HEAD:train_PReNet_UNet.py
+parser = argparse.ArgumentParser(description="PReNet_UNet_train")
+parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
+parser.add_argument("--batch_size", type=int, default=3, help="Training batch size")
+parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
+parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
+parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
+parser.add_argument("--save_path", type=str, default="logs/PReNet_UNet_test", help='path to save models and log files')
+========
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 parser = argparse.ArgumentParser(description="PReNet_train")
 parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
+<<<<<<< HEAD
+<<<<<<<< HEAD:train_PReNet_r.py
 =======
 parser = argparse.ArgumentParser(description="PReNet_1_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
@@ -29,11 +46,26 @@ parser.add_argument("--epochs", type=int, default=5, help="Number of training ep
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet", help='path to save models and log files')
+========
+parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
+parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
+parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN.py
+=======
+parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
+parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
+parser.add_argument("--save_path", type=str, default="logs/PReNet", help='path to save models and log files')
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PReNet_r.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 parser.add_argument("--save_freq",type=int,default=1,help='save intermediate model')
 parser.add_argument("--data_path",type=str, default="datasets/train/RainTrainL",help='path to training data')
 parser.add_argument("--use_gpu", type=bool, default=True, help='use GPU or not')
 parser.add_argument("--gpu_id", type=str, default="0", help='GPU id')
+<<<<<<< HEAD
 parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
+=======
+# parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 opt = parser.parse_args()
 
 if opt.use_gpu:
@@ -48,7 +80,19 @@ def main():
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
+<<<<<<< HEAD
+<<<<<<<< HEAD:train_PReNet_r.py
     model = PReNet_r(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+========
+    model = PRN(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN.py
+=======
+<<<<<<<< HEAD:train_PReNet_UNet.py
+    model = PReNet_UNet(use_GPU=opt.use_gpu)
+========
+    model = PReNet_r(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PReNet_r.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
     print_network(model)
 
     # loss function
@@ -140,6 +184,13 @@ if __name__ == "__main__":
             prepare_data_Rain12600(data_path=opt.data_path, patch_size=100, stride=100)
         else:
             print('unkown datasets: please define prepare data function in DerainDataset.py')
+<<<<<<< HEAD
+<<<<<<<< HEAD:train_PReNet_r.py
 
+========
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN.py
+=======
+
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 
     main()

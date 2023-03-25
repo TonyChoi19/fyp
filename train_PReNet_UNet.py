@@ -13,9 +13,9 @@ from utils import *
 from torch.optim.lr_scheduler import MultiStepLR
 from SSIM import SSIM
 from networks import *
-from time import time
 
 
+<<<<<<<< HEAD:train_PReNet_UNet.py
 parser = argparse.ArgumentParser(description="PReNet_UNet_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=3, help="Training batch size")
@@ -23,8 +23,17 @@ parser.add_argument("--epochs", type=int, default=5, help="Number of training ep
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_UNet_test", help='path to save models and log files')
+========
+parser = argparse.ArgumentParser(description="PReNet_train")
+parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
+parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
+parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
+parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
+parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
+parser.add_argument("--save_path", type=str, default="logs/PReNet", help='path to save models and log files')
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PReNet_r.py
 parser.add_argument("--save_freq",type=int,default=1,help='save intermediate model')
-parser.add_argument("--data_path",type=str, default="datasets/train/Rain12600",help='path to training data')
+parser.add_argument("--data_path",type=str, default="datasets/train/RainTrainL",help='path to training data')
 parser.add_argument("--use_gpu", type=bool, default=True, help='use GPU or not')
 parser.add_argument("--gpu_id", type=str, default="0", help='GPU id')
 # parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
@@ -35,13 +44,18 @@ if opt.use_gpu:
 
 
 def main():
+
     print('Loading dataset ...\n')
     dataset_train = Dataset(data_path=opt.data_path)
     loader_train = DataLoader(dataset=dataset_train, num_workers=4, batch_size=opt.batch_size, shuffle=True)
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
+<<<<<<<< HEAD:train_PReNet_UNet.py
     model = PReNet_UNet(use_GPU=opt.use_gpu)
+========
+    model = PReNet_r(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PReNet_r.py
     print_network(model)
 
     # loss function
@@ -69,7 +83,7 @@ def main():
     # start training
     step = 0
     for epoch in range(initial_epoch, opt.epochs):
-        # scheduler.step(epoch)
+        scheduler.step(epoch)
         for param_group in optimizer.param_groups:
             print('learning rate %f' % param_group["lr"])
 
@@ -104,8 +118,6 @@ def main():
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
-        
-        scheduler.step(epoch)
         ## epoch training end
 
         # log the images
@@ -126,18 +138,15 @@ def main():
 
 
 if __name__ == "__main__":
-    start_time = time()
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
-            print(opt.data_path.find('RainTrainH'))
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
         elif opt.data_path.find('RainTrainL') != -1:
             prepare_data_RainTrainL(data_path=opt.data_path, patch_size=100, stride=80)
         elif opt.data_path.find('Rain12600') != -1:
             prepare_data_Rain12600(data_path=opt.data_path, patch_size=100, stride=100)
         else:
-            print('unknown datasets: please define prepare data function in DerainDataset.py')
+            print('unkown datasets: please define prepare data function in DerainDataset.py')
 
 
     main()
-    print("--- %s seconds ---" % (time()-start_time))

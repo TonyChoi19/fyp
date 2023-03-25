@@ -18,10 +18,8 @@ from time import time
 
 parser = argparse.ArgumentParser(description="PReNet_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
-parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
+parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
-parser.add_argument("--batch_size", type=int, default=3, help="Training batch size")
-parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')

@@ -13,20 +13,40 @@ from utils import *
 from torch.optim.lr_scheduler import MultiStepLR
 from SSIM import SSIM
 from networks import *
+<<<<<<< HEAD
 from time import time
 
 
 <<<<<<< HEAD:train_PRN_dense.py
+=======
+
+
+<<<<<<<< HEAD:train_PRN.py
+<<<<<<< HEAD:train_PRN.py
+parser = argparse.ArgumentParser(description="PReNet_train")
+parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
+=======
+parser = argparse.ArgumentParser(description="PReNet_2_train")
+parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
+>>>>>>> ee58d4620cbaf4749cf1f711250921477a76d5e6:train_PReNet_2.py
+parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
+parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
+========
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 parser = argparse.ArgumentParser(description="PReNet_train")
 parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
+<<<<<<< HEAD
 =======
 parser = argparse.ArgumentParser(description="PReNet_3_train")
 parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
 >>>>>>> ee58d4620cbaf4749cf1f711250921477a76d5e6:train_PReNet_3.py
+=======
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN_dense.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')
@@ -49,7 +69,15 @@ def main():
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
+<<<<<<< HEAD
     model = PRN_dense(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+=======
+<<<<<<<< HEAD:train_PRN.py
+    model = PRN(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+========
+    model = PRN_dense(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN_dense.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
     print_network(model)
 
     # loss function
@@ -77,7 +105,11 @@ def main():
     # start training
     step = 0
     for epoch in range(initial_epoch, opt.epochs):
+<<<<<<< HEAD
         # scheduler.step(epoch)
+=======
+        scheduler.step(epoch)
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
         for param_group in optimizer.param_groups:
             print('learning rate %f' % param_group["lr"])
 
@@ -112,8 +144,16 @@ def main():
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
+<<<<<<< HEAD
         
         
+=======
+<<<<<<<< HEAD:train_PRN.py
+========
+        
+        
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN_dense.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
         ## epoch training end
 
         # log the images
@@ -135,7 +175,10 @@ def main():
         scheduler.step()
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     start_time = time()
+=======
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
@@ -145,6 +188,13 @@ if __name__ == "__main__":
             prepare_data_Rain12600(data_path=opt.data_path, patch_size=100, stride=100)
         else:
             print('unkown datasets: please define prepare data function in DerainDataset.py')
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:train_PRN.py
+
+    main()
+========
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
 
 
     main()
@@ -153,3 +203,7 @@ if __name__ == "__main__":
     minute = math.floor((finish_time%3600) / 60) 
     second = math.floor(((finish_time%3600) / 60) % 60) 
     print("---Completed, used %s hrs, %s minute, %s seconds ---" %(hour, minute, second))
+<<<<<<< HEAD
+=======
+>>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a:train_PRN_dense.py
+>>>>>>> c3e9aded156cea51cf85e2f3a4545ae21155ea4a
