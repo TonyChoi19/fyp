@@ -15,11 +15,10 @@ from SSIM import SSIM
 from networks import *
 from time import time
 
-
 parser = argparse.ArgumentParser(description="PReNet_train")
 parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
-parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
+parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')
@@ -97,16 +96,14 @@ def main():
             out_train, _ = model(input_train)
             out_train = torch.clamp(out_train, 0., 1.)
             psnr_train = batch_PSNR(out_train, target_train, 1.)
-            print("[epoch %d/%d][%d/%d] loss: %.4f, pixel_metric: %.4f, PSNR: %.4f" %
-                  (epoch+1, opt.epochs, i+1, len(loader_train), loss.item(), pixel_metric.item(), psnr_train))
+            print("[epoch %d][%d/%d] loss: %.4f, pixel_metric: %.4f, PSNR: %.4f" %
+                  (epoch+1, i+1, len(loader_train), loss.item(), pixel_metric.item(), psnr_train))
 
             if step % 10 == 0:
                 # Log the scalar values
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
-        
-        
         ## epoch training end
 
         # log the images
@@ -124,7 +121,6 @@ def main():
         torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_latest.pth'))
         if epoch % opt.save_freq == 0:
             torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_epoch%d.pth' % (epoch+1)))
-        
         scheduler.step()
 
 if __name__ == "__main__":

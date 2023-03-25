@@ -115,6 +115,7 @@ class PReNet(nn.Module):
 
         return x, x_list
 
+
 ## PRN
 class PRN(nn.Module):
     def __init__(self, recurrent_iter=6, use_GPU=True):
@@ -161,6 +162,7 @@ class PRN(nn.Module):
         )
 
     def forward(self, input):
+
         x = input
 
         x_list = []
@@ -224,7 +226,7 @@ class PRN_r(nn.Module):
             x_list.append(x)
 
         return x, x_list
-
+    
 class PRN_dense(nn.Module):
     def __init__(self, recurrent_iter=6, use_GPU=True):
         super(PRN_dense, self).__init__()
@@ -300,5 +302,3 @@ class PRN_dense(nn.Module):
             x_list.append(x)
 
         return x, x_list
-
-

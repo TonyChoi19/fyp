@@ -42,7 +42,6 @@ def main():
 
     # Build model
     model = PRN_dense(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
-
     print_network(model)
 
     # loss function
@@ -70,6 +69,7 @@ def main():
     # start training
     step = 0
     for epoch in range(initial_epoch, opt.epochs):
+        # scheduler.step(epoch)
         for param_group in optimizer.param_groups:
             print('learning rate %f' % param_group["lr"])
 
@@ -104,7 +104,6 @@ def main():
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
-
         ## epoch training end
 
         # log the images
@@ -122,13 +121,10 @@ def main():
         torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_latest.pth'))
         if epoch % opt.save_freq == 0:
             torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_epoch%d.pth' % (epoch+1)))
-
         scheduler.step()
 
 if __name__ == "__main__":
-
     start_time = time()
-
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
@@ -139,10 +135,10 @@ if __name__ == "__main__":
         else:
             print('unkown datasets: please define prepare data function in DerainDataset.py')
 
+
     main()
     finish_time = time()-start_time
     hour = math.floor(finish_time / 3600) 
     minute = math.floor((finish_time%3600) / 60) 
     second = math.floor(((finish_time%3600) / 60) % 60) 
     print("---Completed, used %s hrs, %s minute, %s seconds ---" %(hour, minute, second))
-
