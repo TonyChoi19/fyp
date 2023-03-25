@@ -17,14 +17,14 @@ from time import time
 
 
 parser = argparse.ArgumentParser(description="PReNet_train")
-parser.add_argument("--preprocess", type=bool, default=True, help='run prepare_data or not')
-parser.add_argument("--batch_size", type=int, default=18, help="Training batch size")
-parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")
+parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
+parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
+parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
 parser.add_argument("--milestone", type=int, default=[30,50,80], help="When to decay learning rate")
 parser.add_argument("--lr", type=float, default=1e-3, help="initial learning rate")
 parser.add_argument("--save_path", type=str, default="logs/PReNet_test", help='path to save models and log files')
 parser.add_argument("--save_freq",type=int,default=1,help='save intermediate model')
-parser.add_argument("--data_path",type=str, default="datasets/train/Rain12600",help='path to training data')
+parser.add_argument("--data_path",type=str, default="datasets/train/RainTrainL",help='path to training data')
 parser.add_argument("--use_gpu", type=bool, default=True, help='use GPU or not')
 parser.add_argument("--gpu_id", type=str, default="0", help='GPU id')
 parser.add_argument("--recurrent_iter", type=int, default=6, help='number of recursive stages')
@@ -42,7 +42,7 @@ def main():
     print("# of training samples: %d\n" % int(len(dataset_train)))
 
     # Build model
-    model = PReNet(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
+    model = PRN_r(recurrent_iter=opt.recurrent_iter, use_GPU=opt.use_gpu)
     print_network(model)
 
     # loss function
@@ -70,7 +70,7 @@ def main():
     # start training
     step = 0
     for epoch in range(initial_epoch, opt.epochs):
-        scheduler.step(epoch)
+        # scheduler.step(epoch)
         for param_group in optimizer.param_groups:
             print('learning rate %f' % param_group["lr"])
 
@@ -97,16 +97,16 @@ def main():
             out_train, _ = model(input_train)
             out_train = torch.clamp(out_train, 0., 1.)
             psnr_train = batch_PSNR(out_train, target_train, 1.)
-            print("[epoch %d][%d/%d] loss: %.4f, pixel_metric: %.4f, PSNR: %.4f" %
-                  (epoch+1, i+1, len(loader_train), loss.item(), pixel_metric.item(), psnr_train))
+            print("[epoch %d/%d][%d/%d] loss: %.4f, pixel_metric: %.4f, PSNR: %.4f" %
+                  (epoch+1, opt.epochs, i+1, len(loader_train), loss.item(), pixel_metric.item(), psnr_train))
 
             if step % 10 == 0:
                 # Log the scalar values
                 writer.add_scalar('loss', loss.item(), step)
                 writer.add_scalar('PSNR on training data', psnr_train, step)
             step += 1
-
-        scheduler.step(epoch)
+        
+        
         ## epoch training end
 
         # log the images
@@ -124,13 +124,13 @@ def main():
         torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_latest.pth'))
         if epoch % opt.save_freq == 0:
             torch.save(model.state_dict(), os.path.join(opt.save_path, 'net_epoch%d.pth' % (epoch+1)))
-
+        
+        scheduler.step()
 
 if __name__ == "__main__":
     start_time = time()
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
-            print(opt.data_path.find('RainTrainH'))
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
         elif opt.data_path.find('RainTrainL') != -1:
             prepare_data_RainTrainL(data_path=opt.data_path, patch_size=100, stride=80)
@@ -143,7 +143,6 @@ if __name__ == "__main__":
     main()
     finish_time = time()-start_time
     hour = math.floor(finish_time / 3600) 
-    minute = math.floor((finish_time - (finish_time/3600)) / 60) 
-    second = math.floor((finish_time - (finish_time/3600)) % 60) 
-    print("--- %s hrs, %s minute, %s seconds" %(hour, minute, second))
-
+    minute = math.floor((finish_time%3600) / 60) 
+    second = math.floor(((finish_time%3600) / 60) % 60) 
+    print("---Completed, used %s hrs, %s minute, %s seconds ---" %(hour, minute, second))
