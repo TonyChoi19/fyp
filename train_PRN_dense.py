@@ -15,7 +15,7 @@ from SSIM import SSIM
 from networks import *
 from time import time
 
-parser = argparse.ArgumentParser(description="PRN_dense_train")
+parser = argparse.ArgumentParser(description="PReNet_train")
 parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
 parser.add_argument("--batch_size", type=int, default=5, help="Training batch size")
 parser.add_argument("--epochs", type=int, default=100, help="Number of training epochs")

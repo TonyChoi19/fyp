@@ -10,7 +10,7 @@ gt_path='../datasets/test/Rain100H/';
 % PReNet_r = '../results/Rain100H/PReNet_r/';
 % PRN = '../results/Rain100H/PRN6/';
 PRN_r = '../results/Rain100H/PRN_r/';
-PRN_dense = '../results/Rain100H/PRN_dense1/';
+PRN_dense = '../results/Rain100H/PRN_dense/';
  
 struct_model = {
           % struct('model_name','PReNet','path',PReNet),...

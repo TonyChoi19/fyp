@@ -130,7 +130,6 @@ if __name__ == "__main__":
     start_time = time()
     if opt.preprocess:
         if opt.data_path.find('RainTrainH') != -1:
-            print(opt.data_path.find('RainTrainH'))
             prepare_data_RainTrainH(data_path=opt.data_path, patch_size=100, stride=80)
         elif opt.data_path.find('RainTrainL') != -1:
             prepare_data_RainTrainL(data_path=opt.data_path, patch_size=100, stride=80)
