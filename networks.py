@@ -114,79 +114,6 @@ class PReNet(nn.Module):
             x_list.append(x)
 
         return x, x_list
-
-
-## PRN
-class PRN(nn.Module):
-    def __init__(self, recurrent_iter=6, use_GPU=True):
-        super(PRN, self).__init__()
-        self.iteration = recurrent_iter
-        self.use_GPU = use_GPU
-
-        self.conv0 = nn.Sequential(
-            nn.Conv2d(6, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.res_conv1 = nn.Sequential(
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.res_conv2 = nn.Sequential(
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.res_conv3 = nn.Sequential(
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.res_conv4 = nn.Sequential(
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.res_conv5 = nn.Sequential(
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.conv = nn.Sequential(
-            nn.Conv2d(32, 3, 3, 1, 1),
-        )
-
-    def forward(self, input):
-
-        x = input
-
-        x_list = []
-        for i in range(self.iteration):
-            x = torch.cat((input, x), 1)
-            x = self.conv0(x)
-            resx = x
-            x = F.relu(self.res_conv1(x) + resx)
-            resx = x
-            x = F.relu(self.res_conv2(x) + resx)
-            resx = x
-            x = F.relu(self.res_conv3(x) + resx)
-            resx = x
-            x = F.relu(self.res_conv4(x) + resx)
-            resx = x
-            x = F.relu(self.res_conv5(x) + resx)
-            x = self.conv(x)
-
-            x = x + input
-            x_list.append(x)
-
-        return x, x_list
-
-
 class PRN_r(nn.Module):
     def __init__(self, recurrent_iter=6, use_GPU=True):
         super(PRN_r, self).__init__()
@@ -239,38 +166,32 @@ class PRN_dense(nn.Module):
             )
 
         self.dense_conv1 = nn.Sequential(
-            # nn.BatchNorm2d(32),
             nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv2 = nn.Sequential(
-            # nn.BatchNorm2d(32),
             nn.Conv2d(64, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv3 = nn.Sequential(
-            # nn.BatchNorm2d(32),
             nn.Conv2d(96, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv4 = nn.Sequential(
-            # nn.BatchNorm2d(32),
             nn.Conv2d(128, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv5 = nn.Sequential(
-            # nn.BatchNorm2d(32),
             nn.Conv2d(160, 32, 3, 1, 1),
             nn.ReLU()
             )
 
         self.conv = nn.Sequential(
             nn.Conv2d(192, 3, 3, 1, 1),
-            # nn.BatchNorm2d(3),
             nn.ReLU()
             )
 

@@ -20,3 +20,6 @@ python test_PReNet_GRU.py --logdir logs/Ablation/PReNet6_GRU --save_path results
 
 # PReNet6_x
 python test_PReNet_x.py --logdir logs/Ablation/PReNet6_x --save_path results/Ablation/PReNet6_x --data_path datasets/test/Rain100H/rainy
+
+# PRN_dense
+python test_PRN_dense.py --logdir logs/Ablation/PRN_dense --save_path results/Ablation/PRN_dense --data_path datasets/test/Rain100H/rainy
