@@ -223,3 +223,87 @@ class PRN_dense(nn.Module):
             x_list.append(x)
 
         return x, x_list
+    
+class PRN_dense_conv(nn.Module):
+    def __init__(self, recurrent_iter=6, use_GPU=True):
+        super(PRN_dense_conv, self).__init__()
+        self.iteration = recurrent_iter
+        self.use_GPU = use_GPU
+
+        self.conv0 = nn.Sequential(
+            nn.Conv2d(6, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(6, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+
+        self.dense_conv1 = nn.Sequential(
+            nn.Conv2d(32, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(32, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+        
+        self.dense_conv2 = nn.Sequential(
+            nn.Conv2d(64, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(64, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+        
+        self.dense_conv3 = nn.Sequential(
+            nn.Conv2d(96, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(96, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+        
+        self.dense_conv4 = nn.Sequential(
+            nn.Conv2d(128, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(128, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+        
+        self.dense_conv5 = nn.Sequential(
+            nn.Conv2d(160, 32, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(160, 32, 3, 1, 1),
+            nn.ReLU()
+            )
+
+        self.conv = nn.Sequential(
+            nn.Conv2d(192, 3, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(192, 3, 3, 1, 1),
+            nn.ReLU()
+            )
+
+    def forward(self, input):
+
+        x = input
+
+        x_list = []
+        for i in range(self.iteration):
+            x = torch.cat((input, x), 1)
+            x = self.conv0(x) #6, 32
+
+            dense_x1 = self.dense_conv1(x) #32,32
+            dense_x1_concat = torch.cat((x, dense_x1), dim = 1) #32, 64
+
+            dense_x2 = self.dense_conv2(dense_x1_concat) #64, 32
+            dense_x2_concat = torch.cat((dense_x1_concat, dense_x2), dim = 1)#32, 96
+
+            dense_x3 = self.dense_conv3(dense_x2_concat)#96, 32
+            dense_x3_concat = torch.cat((dense_x2_concat, dense_x3), dim = 1)#32, 128
+
+            dense_x4 = self.dense_conv4(dense_x3_concat)#128, 32
+            dense_x4_concat = torch.cat((dense_x3_concat, dense_x4), dim = 1)#32, 160
+
+            dense_x5 = self.dense_conv5(dense_x4_concat)#160, 32
+            dense_x5_concat = torch.cat((dense_x4_concat, dense_x5), dim = 1)#32, 192
+
+            x = self.conv(dense_x5_concat) #192, 3
+            x_list.append(x)
+
+        return x, x_list
