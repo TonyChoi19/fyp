@@ -232,8 +232,6 @@ class PRN_dense_conv(nn.Module):
 
         self.conv0 = nn.Sequential(
             nn.Conv2d(6, 32, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(6, 32, 3, 1, 1),
             nn.ReLU()
             )
 
@@ -247,34 +245,32 @@ class PRN_dense_conv(nn.Module):
         self.dense_conv2 = nn.Sequential(
             nn.Conv2d(64, 32, 3, 1, 1),
             nn.ReLU(),
-            nn.Conv2d(64, 32, 3, 1, 1),
+            nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv3 = nn.Sequential(
             nn.Conv2d(96, 32, 3, 1, 1),
             nn.ReLU(),
-            nn.Conv2d(96, 32, 3, 1, 1),
+            nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv4 = nn.Sequential(
             nn.Conv2d(128, 32, 3, 1, 1),
             nn.ReLU(),
-            nn.Conv2d(128, 32, 3, 1, 1),
+            nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU()
             )
         
         self.dense_conv5 = nn.Sequential(
             nn.Conv2d(160, 32, 3, 1, 1),
             nn.ReLU(),
-            nn.Conv2d(160, 32, 3, 1, 1),
+            nn.Conv2d(32, 32, 3, 1, 1),
             nn.ReLU()
             )
 
         self.conv = nn.Sequential(
-            nn.Conv2d(192, 3, 3, 1, 1),
-            nn.ReLU(),
             nn.Conv2d(192, 3, 3, 1, 1),
             nn.ReLU()
             )
